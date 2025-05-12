@@ -1,0 +1,80 @@
+.driver-navbar {
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.driver-navbar-logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  text-decoration: none;
+}
+
+.driver-navbar-links {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.driver-navbar-link {
+  color: #666;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.driver-navbar-link:hover {
+  color: #007bff;
+}
+
+.driver-navbar-link.active {
+  color: #007bff;
+}
+
+.driver-navbar-user {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.driver-navbar-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.driver-navbar-logout {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.driver-navbar-logout:hover {
+  background-color: #c82333;
+}
+
+@media (max-width: 768px) {
+  .driver-navbar {
+    padding: 1rem;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .driver-navbar-links {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .driver-navbar-user {
+    margin-top: 1rem;
+  }
+} 

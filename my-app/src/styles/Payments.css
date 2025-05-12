@@ -1,0 +1,289 @@
+.payments-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.payments-header {
+  margin-bottom: 30px;
+}
+
+.payments-header h1 {
+  margin: 0 0 20px;
+  color: #333;
+  font-size: 2rem;
+}
+
+.payment-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.tab-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  background-color: #f5f5f5;
+  color: #666;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tab-btn svg {
+  font-size: 1.2rem;
+}
+
+.tab-btn:hover {
+  background-color: #e0e0e0;
+}
+
+.tab-btn.active {
+  background-color: #1a73e8;
+  color: white;
+}
+
+/* Payment History */
+.payment-history h2,
+.payment-methods h2 {
+  margin: 0 0 20px;
+  color: #333;
+}
+
+.payments-list {
+  display: grid;
+  gap: 15px;
+}
+
+.payment-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.payment-info {
+  flex: 1;
+}
+
+.payment-primary {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 10px;
+}
+
+.payment-primary h3 {
+  margin: 0;
+  color: #333;
+}
+
+.payment-status {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.status-success {
+  background-color: #e8f5e9;
+  color: #28a745;
+}
+
+.status-pending {
+  background-color: #fff3e0;
+  color: #f57c00;
+}
+
+.status-failed {
+  background-color: #ffebee;
+  color: #dc3545;
+}
+
+.payment-details p {
+  margin: 5px 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.payment-amount h3 {
+  margin: 0;
+  color: #1a73e8;
+  font-size: 1.5rem;
+}
+
+/* Payment Methods */
+.methods-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.add-method-btn {
+  padding: 10px 20px;
+  background-color: #1a73e8;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.add-method-btn:hover {
+  background-color: #1557b0;
+}
+
+.saved-methods {
+  display: grid;
+  gap: 15px;
+}
+
+.method-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.card-icon {
+  font-size: 2rem;
+  color: #1a73e8;
+}
+
+.card-info {
+  flex: 1;
+}
+
+.card-info h3 {
+  margin: 0 0 5px;
+  color: #333;
+}
+
+.card-info p {
+  margin: 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.card-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.edit-btn,
+.delete-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.edit-btn {
+  background-color: transparent;
+  color: #1a73e8;
+  border: 1px solid #1a73e8;
+}
+
+.edit-btn:hover {
+  background-color: #1a73e8;
+  color: white;
+}
+
+.delete-btn {
+  background-color: transparent;
+  color: #dc3545;
+  border: 1px solid #dc3545;
+}
+
+.delete-btn:hover {
+  background-color: #dc3545;
+  color: white;
+}
+
+.no-payments {
+  text-align: center;
+  padding: 40px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.no-payments h3 {
+  margin: 0;
+  color: #666;
+}
+
+.payments-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+
+.payments-loading h2 {
+  color: #666;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .payments-container {
+    padding: 15px;
+  }
+
+  .payment-tabs {
+    flex-direction: column;
+  }
+
+  .payment-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
+  }
+
+  .payment-primary {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .method-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .card-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .edit-btn,
+  .delete-btn {
+    width: 100%;
+  }
+
+  .methods-header {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .add-method-btn {
+    width: 100%;
+    justify-content: center;
+  }
+} 
