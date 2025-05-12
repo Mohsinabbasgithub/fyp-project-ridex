@@ -1,0 +1,47 @@
+/* src/styles/Signup.css */
+.signup-container {
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .signup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .signup-form input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .terms {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+  }
+  
+  .create-account-btn {
+    background-color: #6b46c1;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .error {
+    color: red;
+    font-size: 14px;
+  }
+  
+  .success {
+    color: green;
+    font-size: 14px;
+  }
+  
