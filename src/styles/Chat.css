@@ -1,0 +1,146 @@
+.chat-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 20px;
+  height: calc(100vh - 100px);
+}
+
+.chat-container h1 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.chat-list {
+  background: white;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+}
+
+.chat-item {
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.chat-item:hover {
+  background-color: #f8f9fa;
+}
+
+.chat-item.active {
+  background-color: #e8f0fe;
+}
+
+.chat-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+
+.chat-name {
+  font-weight: 500;
+  color: #333;
+}
+
+.chat-preview {
+  color: #666;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chat-messages {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.messages-list {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 20px;
+}
+
+.message {
+  margin-bottom: 15px;
+  max-width: 70%;
+}
+
+.message.sent {
+  align-self: flex-end;
+  background-color: #e8f0fe;
+  padding: 10px 15px;
+  border-radius: 15px 15px 0 15px;
+}
+
+.message.received {
+  align-self: flex-start;
+  background-color: #f1f3f4;
+  padding: 10px 15px;
+  border-radius: 15px 15px 15px 0;
+}
+
+.message-time {
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 5px;
+}
+
+.message-input {
+  display: flex;
+  gap: 10px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.message-input input {
+  flex: 1;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  font-size: 1rem;
+}
+
+.send-btn {
+  background-color: #1a73e8;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.send-btn:hover {
+  background-color: #1557b0;
+}
+
+@media screen and (max-width: 768px) {
+  .chat-container {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  .chat-list {
+    max-height: 300px;
+  }
+
+  .message {
+    max-width: 85%;
+  }
+} 
