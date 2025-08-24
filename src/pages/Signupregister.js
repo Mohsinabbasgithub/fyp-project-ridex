@@ -4,7 +4,7 @@ import { FcGoogle } from "react-icons/fc";
 import { auth, db } from "../firebase"; // ✅ Firebase auth & Firestore
 import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, sendEmailVerification } from "firebase/auth";
 import { setDoc, doc, getDoc } from "firebase/firestore"; // ✅ Firestore to store user data
-import { useNavigate } from "react-router-dom"; // ✅ For navigation
+import { useNavigate, useLocation } from "react-router-dom"; // ✅ For navigation
 import "../styles/SignupForm.css";
 import emailjs from '@emailjs/browser';
 
@@ -29,6 +29,8 @@ const SignupRegister = () => {
     number: false
   });
   const navigate = useNavigate();
+  const location = useLocation();
+  const isDriverIntent = location.search.includes('driver=1');
 
   // Password validation function
   const validatePassword = (password) => {
@@ -78,7 +80,8 @@ const SignupRegister = () => {
           photoURL: user.photoURL,
           createdAt: new Date(),
           provider: "google",
-          emailVerified: user.emailVerified
+          emailVerified: user.emailVerified,
+          intendedRole: isDriverIntent ? 'driver' : 'user'
         });
         
         if (!user.emailVerified) {
@@ -93,7 +96,11 @@ const SignupRegister = () => {
         alert("Account already exists! Signing you in...");
       }
       
-      navigate("/Dashboard");
+      if (isDriverIntent) {
+        navigate("/DriverRegistration");
+      } else {
+        navigate("/Dashboard");
+      }
     } catch (err) {
       setError(err.message);
     } finally {
@@ -136,7 +143,8 @@ const SignupRegister = () => {
         uid: user.uid,
         createdAt: new Date(),
         provider: "email",
-        emailVerified: false
+        emailVerified: false,
+        intendedRole: isDriverIntent ? 'driver' : 'user'
       });
 
       setVerificationSent(true);
@@ -160,8 +168,12 @@ const SignupRegister = () => {
       await auth.currentUser.reload();
       
       if (auth.currentUser.emailVerified) {
-        alert("🎉 Email verified successfully! Redirecting to Dashboard...");
-        navigate("/Dashboard");
+        alert("🎉 Email verified successfully! Redirecting...");
+        if (isDriverIntent) {
+          navigate("/DriverRegistration");
+        } else {
+          navigate("/Dashboard");
+        }
       } else {
         setError("Email not verified yet. Please check your inbox and click the verification link.");
       }

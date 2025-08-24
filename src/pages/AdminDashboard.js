@@ -4,8 +4,7 @@ import { db } from '../firebase';
 import '../styles/AdminDashboard.css';
 import { FaUsers, FaCar, FaCalendarAlt, FaCheck, FaTimes, FaSignOutAlt, FaEdit, FaFilter } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import { signOut } from 'firebase/auth';
-import { auth } from '../firebase';
+import { useAdminAuth } from '../context/AdminAuthContext';
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('vehicles');
@@ -20,6 +19,7 @@ const AdminDashboard = () => {
   const [selectedVehicle, setSelectedVehicle] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const navigate = useNavigate();
+  const { logout } = useAdminAuth();
 
   useEffect(() => {
     fetchData();
@@ -27,8 +27,12 @@ const AdminDashboard = () => {
   }, [activeTab]);
 
   const handleLogout = async () => {
-    await signOut(auth);
-    navigate('/admin-login');
+    try {
+      await logout();
+      navigate('/admin-login');
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
   };
 
   const fetchData = async () => {
@@ -146,13 +150,57 @@ const AdminDashboard = () => {
   };
 
   const fetchBookings = async () => {
-    const bookingsQuery = query(collection(db, 'bookings'));
-    const snapshot = await getDocs(bookingsQuery);
-    const bookingsData = snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
-    setBookings(bookingsData);
+    try {
+      const bookingsQuery = query(collection(db, 'bookings'));
+      const snapshot = await getDocs(bookingsQuery);
+      const bookingsData = [];
+      
+      for (const docSnapshot of snapshot.docs) {
+        const bookingData = docSnapshot.data();
+        
+        // Get user details
+        let userName = 'Unknown User';
+        if (bookingData.userId) {
+          try {
+            const userRef = doc(db, 'users', bookingData.userId);
+            const userDoc = await getDoc(userRef);
+            if (userDoc.exists()) {
+              const userData = userDoc.data();
+              userName = userData.fullName || userData.displayName || userData.email || 'Unknown User';
+            }
+          } catch (error) {
+            console.error('Error fetching user details:', error);
+          }
+        }
+        
+        // Get driver details
+        let driverName = 'No Driver Assigned';
+        if (bookingData.driverId) {
+          try {
+            const driverRef = doc(db, 'drivers', bookingData.driverId);
+            const driverDoc = await getDoc(driverRef);
+            if (driverDoc.exists()) {
+              const driverData = driverDoc.data();
+              driverName = driverData.fullName || driverData.displayName || 'Unknown Driver';
+            }
+          } catch (error) {
+            console.error('Error fetching driver details:', error);
+          }
+        }
+        
+        bookingsData.push({
+          id: docSnapshot.id,
+          ...bookingData,
+          userName,
+          driverName
+        });
+      }
+      
+      setBookings(bookingsData);
+    } catch (error) {
+      console.error('Error fetching bookings:', error);
+      setError('Failed to fetch bookings');
+    }
   };
 
   const fetchPendingData = async () => {
@@ -190,6 +238,7 @@ const AdminDashboard = () => {
 
   const handleApproval = async (id, type, status) => {
     try {
+      console.log(`Approving ${type} with ID: ${id}, status: ${status}`);
       const docRef = doc(db, type === 'driver' ? 'drivers' : 'vehicles', id);
       const normalizedStatus = status.toLowerCase();
       const updateData = {
@@ -200,8 +249,32 @@ const AdminDashboard = () => {
         isVisible: normalizedStatus === 'approved'
       };
       
+      console.log('Update data:', updateData);
+      console.log('Document reference:', docRef.path);
+      
       // First update the vehicle/driver document
       await updateDoc(docRef, updateData);
+      console.log(`Updated ${type} document successfully`);
+      
+      // Verify the update
+      const updatedDoc = await getDoc(docRef);
+      if (updatedDoc.exists()) {
+        const updatedData = updatedDoc.data();
+        console.log('Verified update - isApproved:', updatedData.isApproved, 'status:', updatedData.status);
+        
+        // Double-check that the approval was saved correctly
+        if (normalizedStatus === 'approved' && (!updatedData.isApproved || updatedData.status !== 'approved')) {
+          console.error('Approval not saved correctly, retrying...');
+          // Retry the update
+          await updateDoc(docRef, {
+            isApproved: true,
+            status: 'approved',
+            approvedAt: new Date(),
+            updatedAt: new Date()
+          });
+          console.log('Retry update completed');
+        }
+      }
 
       if (type === 'vehicle') {
         const vehicleDoc = await getDoc(docRef);
@@ -231,6 +304,7 @@ const AdminDashboard = () => {
               vehicles: updatedVehicles,
               lastUpdated: new Date()
             });
+            console.log('Updated driver vehicles successfully');
           }
         }
       }
@@ -238,9 +312,13 @@ const AdminDashboard = () => {
       // Refresh the data immediately
       await fetchData();
       await fetchPendingData();
+      console.log('Data refreshed successfully');
+      
+      // Show success message
+      alert(`${type} ${status} successfully!`);
     } catch (error) {
       console.error('Error updating approval status:', error);
-      alert('Failed to update approval status');
+      alert('Failed to update approval status: ' + error.message);
     }
   };
 
@@ -480,27 +558,38 @@ const AdminDashboard = () => {
         <thead>
           <tr>
             <th>User</th>
-            <th>Vehicle</th>
-            <th>Dates</th>
+            <th>Driver</th>
+            <th>Pickup Location</th>
+            <th>Destination</th>
             <th>Status</th>
-            <th>Total</th>
+            <th>Price</th>
+            <th>Created</th>
           </tr>
         </thead>
         <tbody>
           {bookings.map(booking => (
             <tr key={booking.id}>
-              <td>{booking.userName}</td>
-              <td>{booking.vehicleName}</td>
+              <td>{booking.userName || booking.userEmail || 'Unknown User'}</td>
+              <td>{booking.driverName || 'No Driver Assigned'}</td>
+              <td>{booking.pickupLocation || 'N/A'}</td>
+              <td>{booking.destination || 'N/A'}</td>
               <td>
-                {new Date(booking.startDate).toLocaleDateString()} - 
-                {new Date(booking.endDate).toLocaleDateString()}
-              </td>
-              <td>
-                <span className={`status-badge ${booking.status}`}>
-                  {booking.status}
+                <span className={`status-badge ${booking.status || 'unknown'}`}>
+                  {booking.status || 'Unknown'}
                 </span>
               </td>
-              <td>${booking.totalAmount}</td>
+              <td>
+                ${booking.finalPrice || booking.userProposedPrice || booking.estimatedPrice || 0}
+              </td>
+              <td>
+                {booking.createdAt ? 
+                  (booking.createdAt.seconds ? 
+                    new Date(booking.createdAt.seconds * 1000).toLocaleDateString() :
+                    new Date(booking.createdAt).toLocaleDateString()
+                  ) : 
+                  'N/A'
+                }
+              </td>
             </tr>
           ))}
         </tbody>

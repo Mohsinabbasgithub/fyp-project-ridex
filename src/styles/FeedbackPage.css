@@ -87,6 +87,31 @@
   flex: 1;
 }
 
+.review-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.reviewer-name {
+  font-weight: 600;
+  color: #222;
+}
+
+.rating-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #fff8e1;
+  color: #b36a00;
+  border: 1px solid #ffe7a3;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
 .feedback-meta .rating {
   display: flex;
   gap: 3px;
@@ -106,6 +131,11 @@
   color: #333;
   line-height: 1.6;
   margin: 0;
+}
+
+.feedback-content .quoted {
+  font-style: italic;
+  position: relative;
 }
 
 .sentiment-indicator {

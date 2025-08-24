@@ -128,7 +128,11 @@ const DriverRegistration = () => {
         email: currentUser.email,
         createdAt: serverTimestamp(),
         status: 'pending',
-        isApproved: false
+        isApproved: false,
+        isOnline: false,
+        isAvailable: false,
+        hasVehicle: false,
+        role: 'driver' // Add this line to mark the user as a driver
       };
 
       // Add driver document to 'drivers' collection with user.uid as the document ID

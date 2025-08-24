@@ -1,0 +1,763 @@
+.ride-booking-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #f8f9fa;
+  min-height: 100vh;
+}
+
+.booking-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.booking-header h1 {
+  color: #2c3e50;
+  margin-bottom: 10px;
+  font-size: 2rem;
+}
+
+.booking-header p {
+  color: #7f8c8d;
+  font-size: 1.1rem;
+}
+
+/* Location Input Section */
+.location-section {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  color: #2c3e50;
+}
+
+.location-input {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  padding: 15px;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  transition: border-color 0.3s ease;
+}
+
+.location-input:last-child {
+  margin-bottom: 0;
+}
+
+.location-input:focus-within {
+  border-color: #3498db;
+}
+
+/* Feedback Section Styles */
+.feedback-section {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px 0;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.feedback-section h3 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-size: 1.5rem;
+}
+
+.feedback-section .rating-stars {
+  margin-bottom: 15px;
+  display: flex;
+  gap: 5px;
+}
+
+.feedback-section .feedback-card {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.location-icon {
+  margin-right: 15px;
+  font-size: 1.2rem;
+}
+
+.location-icon.pickup {
+  color: #27ae60;
+}
+
+.location-icon.destination {
+  color: #e74c3c;
+}
+
+.location-input input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  background: transparent;
+}
+
+.location-input input:disabled {
+  background: #f8f9fa;
+  color: #6c757d;
+}
+
+/* Ride Type Section */
+.ride-type-section {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  color: #2c3e50;
+}
+
+.ride-type-section h3 {
+  margin-bottom: 20px;
+  color: #2c3e50;
+}
+
+.ride-types {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 15px;
+}
+
+.ride-type-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 15px;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.ride-type-card:hover {
+  border-color: #3498db;
+  transform: translateY(-2px);
+}
+
+.ride-type-card.selected {
+  border-color: #3498db;
+  background: #ebf3fd;
+}
+
+.ride-icon {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.ride-info h4 {
+  margin: 0 0 5px 0;
+  color: #2c3e50;
+  font-size: 1rem;
+}
+
+.ride-info p {
+  margin: 0;
+  color: #7f8c8d;
+  font-size: 0.9rem;
+}
+
+/* Price Estimation */
+.price-estimation {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  color: #2c3e50;
+}
+
+/* Bidding Section */
+.bidding-section {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e9ecef;
+}
+
+.bidding-section h3 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bidding-input {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bidding-input label {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.bidding-input input {
+  padding: 12px;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.bidding-input input:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+.bidding-input small {
+  color: #7f8c8d;
+  font-size: 0.9rem;
+}
+
+/* Bidding Status */
+.bidding-status {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  color: #2c3e50;
+}
+
+.bidding-status-card h3 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bidding-info {
+  margin-bottom: 20px;
+}
+
+.bidding-info p {
+  margin-bottom: 8px;
+  color: #2c3e50;
+}
+
+.bidding-info strong {
+  color: #27ae60;
+}
+
+.bidding-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* Counter Offer */
+.counter-offer {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  border: 2px solid #f39c12;
+  color: #2c3e50;
+}
+
+.counter-offer-card h3 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.offer-details {
+  margin-bottom: 20px;
+}
+
+.offer-details p {
+  margin-bottom: 8px;
+  color: #2c3e50;
+}
+
+.offer-details strong {
+  color: #f39c12;
+}
+
+.counter-offer-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.accept-btn {
+  background: #27ae60;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.accept-btn:hover {
+  background: #229954;
+}
+
+.reject-btn {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.reject-btn:hover {
+  background: #c0392b;
+}
+
+/* Bidding History */
+.bidding-history {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  color: #2c3e50;
+}
+
+.bidding-history h3 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.history-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 10px;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  background: #f8f9fa;
+}
+
+.bid-type {
+  color: #3498db;
+  font-size: 1.2rem;
+}
+
+.bid-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.bid-price {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.bid-time {
+  font-size: 0.9rem;
+  color: #7f8c8d;
+}
+
+.estimation-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.estimation-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+.estimation-item svg {
+  color: #3498db;
+}
+
+/* Search Button */
+.search-drivers-btn {
+  width: 100%;
+  padding: 15px;
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-bottom: 20px;
+}
+
+.search-drivers-btn:hover:not(:disabled) {
+  background: #2980b9;
+}
+
+.search-drivers-btn:disabled {
+  background: #bdc3c7;
+  cursor: not-allowed;
+}
+
+/* Drivers Section */
+.drivers-section {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.drivers-section h3 {
+  margin-bottom: 20px;
+  color: #2c3e50;
+}
+
+.drivers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.driver-card {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.driver-card:hover {
+  border-color: #3498db;
+  transform: translateY(-2px);
+}
+
+.driver-card.selected {
+  border-color: #3498db;
+  background: #ebf3fd;
+}
+
+.driver-avatar {
+  margin-right: 15px;
+}
+
+.driver-avatar img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.avatar-placeholder {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #3498db;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.driver-info {
+  flex: 1;
+}
+
+.driver-info h4 {
+  margin: 0 0 5px 0;
+  color: #2c3e50;
+}
+
+.driver-rating {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 5px;
+}
+
+.driver-rating .star {
+  color: #f39c12;
+  font-size: 0.9rem;
+}
+
+.driver-vehicle {
+  margin: 0;
+  color: #7f8c8d;
+  font-size: 0.9rem;
+}
+
+.driver-actions {
+  margin-left: 15px;
+}
+
+.call-btn {
+  background: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.call-btn:hover {
+  background: #229954;
+}
+
+/* Booking Confirmation */
+.booking-confirmation {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  color: #2c3e50;
+}
+
+.booking-confirmation h3 {
+  margin-bottom: 20px;
+  color: #2c3e50;
+  text-align: center;
+}
+
+.confirmation-card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.driver-summary {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.driver-details h4 {
+  margin: 0 0 5px 0;
+  color: #2c3e50;
+}
+
+.ride-details {
+  border-top: 1px solid #e9ecef;
+  padding-top: 20px;
+}
+
+.ride-route {
+  margin-bottom: 15px;
+}
+
+.route-point {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+
+.route-point:last-child {
+  margin-bottom: 0;
+}
+
+.route-line {
+  width: 2px;
+  height: 20px;
+  background: #bdc3c7;
+  margin-left: 9px;
+}
+
+.ride-summary {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.ride-summary p {
+  margin: 0;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+.confirmation-actions {
+  display: flex;
+  gap: 15px;
+}
+
+.cancel-btn, .confirm-btn {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cancel-btn {
+  background: #e74c3c;
+  color: white;
+}
+
+.cancel-btn:hover {
+  background: #c0392b;
+}
+
+.confirm-btn {
+  background: #27ae60;
+  color: white;
+}
+
+.confirm-btn:hover {
+  background: #229954;
+}
+
+/* Ride Progress */
+.ride-progress {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  color: #2c3e50;
+}
+
+.ride-progress h3 {
+  margin-bottom: 20px;
+  color: #2c3e50;
+  text-align: center;
+}
+
+.progress-card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.progress-actions {
+  display: flex;
+  gap: 15px;
+}
+
+.start-ride-btn {
+  flex: 1;
+  padding: 12px;
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.start-ride-btn:hover {
+  background: #2980b9;
+}
+
+/* Active Ride */
+.active-ride {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  color: #2c3e50;
+}
+
+.active-ride h3 {
+  margin-bottom: 20px;
+  color: #2c3e50;
+  text-align: center;
+}
+
+.active-ride-card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ride-timer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+.ride-actions {
+  display: flex;
+  gap: 15px;
+}
+
+.complete-ride-btn {
+  flex: 1;
+  padding: 12px;
+  background: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.complete-ride-btn:hover {
+  background: #229954;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .ride-booking-container {
+    padding: 15px;
+  }
+  
+  .ride-types {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .estimation-card {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  
+  .confirmation-actions,
+  .progress-actions,
+  .ride-actions {
+    flex-direction: column;
+  }
+}

@@ -1,41 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { FaUser, FaCar, FaSignOutAlt, FaBars, FaTimes, FaTachometerAlt } from 'react-icons/fa';
+import { FaUser, FaCar, FaSignOutAlt, FaBars, FaTimes, FaTachometerAlt, FaTaxi, FaMapMarkerAlt } from 'react-icons/fa';
 import '../styles/Navbar.css';
+import NotificationSystem from './NotificationSystem';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 
 const Navbar = () => {
-  const { currentUser, userProfile, logout, loading } = useAuth();
+  const { currentUser, userProfile, logout, loading, userRole } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isDriver, setIsDriver] = useState(false);
+  const [driverRegistered, setDriverRegistered] = useState(false);
+
+  useEffect(() => {
+    const checkDriverRegistration = async () => {
+      if (userRole === 'driver' && currentUser) {
+        try {
+          const driverRef = doc(db, 'drivers', currentUser.uid);
+          const driverDoc = await getDoc(driverRef);
+          setDriverRegistered(driverDoc.exists());
+        } catch {
+          setDriverRegistered(false);
+        }
+      } else {
+        setDriverRegistered(false);
+      }
+    };
+    checkDriverRegistration();
+  }, [userRole, currentUser]);
 
   // Check if we're in admin section
   const isAdminRoute = location.pathname.includes('/admin');
   // Check if we're in driver section
   const isDriverRoute = location.pathname.includes('/driver') || location.pathname.includes('/DriverVehicle');
-
-  useEffect(() => {
-    const checkDriverStatus = async () => {
-      if (currentUser && !isAdminRoute) {
-        try {
-          const driverRef = doc(db, 'drivers', currentUser.uid);
-          const driverDoc = await getDoc(driverRef);
-          setIsDriver(driverDoc.exists());
-        } catch (error) {
-          console.error('Error checking driver status:', error);
-          setIsDriver(false);
-        }
-      } else {
-        setIsDriver(false);
-      }
-    };
-
-    checkDriverStatus();
-  }, [currentUser, isAdminRoute]);
 
   useEffect(() => {
     if (menuOpen) {
@@ -99,7 +98,7 @@ const Navbar = () => {
   }
 
   // Render driver navigation
-  if (isDriverRoute && isDriver) {
+  if (userRole === 'driver') {
     return (
       <nav className="navbar">
         <div className="navbar-container">
@@ -107,28 +106,57 @@ const Navbar = () => {
             <FaCar className="logo-icon" />
             <span>RideX</span>
           </Link>
-          <div className="navbar-links">
-            <Link to="/" className="nav-link">Home</Link>
-            <Link to="/all-vehicles" className="nav-link">Find Vehicles</Link>
-            <Link to="/about" className="nav-link">About Us</Link>
-            <Link to="/contact" className="nav-link">Contact Us</Link>
+          {/* Mobile menu icon for driver navbar */}
+          <div className="menu-icon" onClick={toggleMenu}>
+            {menuOpen ? <FaTimes /> : <FaBars />}
           </div>
-          <div className="navbar-right">
-            <div className="user-menu">
-              <Link to={`/driver/${currentUser.uid}`} className="driver-link">
-                <FaTachometerAlt className="driver-icon" />
-                <span>Driver Profile</span>
+          {driverRegistered ? (
+            <>
+              <div className={menuOpen ? "navbar-links active" : "navbar-links"}>
+                <Link to="/ride-history" className="nav-link" onClick={() => setMenuOpen(false)}>
+                  Ride History
+                </Link>
+                <Link to="/about" className="nav-link" onClick={() => setMenuOpen(false)}>
+                  About Us
+                </Link>
+                <Link to="/contact" className="nav-link" onClick={() => setMenuOpen(false)}>
+                  Contact Us
+                </Link>
+              </div>
+              <div className={menuOpen ? "navbar-right active" : "navbar-right"}>
+                <div className="user-menu">
+                  {/* Driver Profile removed from driver panel as requested */}
+                  <Link to="/DriverVehicle" className="driver-link" onClick={() => setMenuOpen(false)}>
+                    <FaCar className="driver-icon" />
+                    <span>Add Vehicles</span>
+                  </Link>
+                  <Link to="/driver-dashboard" className="driver-link" onClick={() => setMenuOpen(false)}>
+                    <FaTachometerAlt className="driver-icon" />
+                    <span>Driver Dashboard</span>
+                  </Link>
+                  <NotificationSystem />
+                  <button onClick={() => {handleLogout(); setMenuOpen(false);}} className="logout-btn">
+                    <FaSignOutAlt className="logout-icon" />
+                    <span>Logout</span>
+                  </button>
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="navbar-links">
+              <Link to="/DriverRegistration" className="nav-link" onClick={() => setMenuOpen(false)}>
+                Complete Driver Registration
               </Link>
-              <Link to="/DriverVehicle" className="driver-link">
-                <FaCar className="driver-icon" />
-                <span>Add Vehicles</span>
-              </Link>
-              <button onClick={handleLogout} className="logout-btn">
+              <button onClick={() => {handleLogout(); setMenuOpen(false);}} className="logout-btn">
                 <FaSignOutAlt className="logout-icon" />
                 <span>Logout</span>
               </button>
             </div>
-          </div>
+          )}
+          <div 
+            className={menuOpen ? "menu-overlay active" : "menu-overlay"}
+            onClick={() => setMenuOpen(false)}
+          />
         </div>
       </nav>
     );
@@ -142,22 +170,48 @@ const Navbar = () => {
           <FaCar className="logo-icon" />
           <span>RideX</span>
         </Link>
-
         <div className="menu-icon" onClick={toggleMenu}>
           {menuOpen ? <FaTimes /> : <FaBars />}
         </div>
-
         <div className={menuOpen ? "navbar-links active" : "navbar-links"}>
           <Link to="/" className="nav-link" onClick={() => setMenuOpen(false)}>
             Home
           </Link>
-          <Link to="/all-vehicles" className="nav-link" onClick={() => setMenuOpen(false)}>
-            Find Vehicles
+          <Link to="/feedback" className="nav-link" onClick={() => setMenuOpen(false)}>
+            Reviews
           </Link>
-          {!isDriver && !isAdminRoute && (
-            <Link to="/DriverRegistration" className="nav-link" onClick={() => setMenuOpen(false)}>
-              Become a Driver
+          {/* Hidden as requested: Find Vehicles */}
+          {false && (
+            <Link to="/all-vehicles" className="nav-link" onClick={() => setMenuOpen(false)}>
+              Find Vehicles
             </Link>
+          )}
+          <Link to="/ride-booking" className="nav-link" onClick={() => setMenuOpen(false)}>
+            <FaTaxi /> Book a Ride
+          </Link>
+          {/* Only show Become a Driver if not logged in */}
+          {!currentUser && (
+            <>
+              {/* Hidden as requested: login/sign up as user/driver dropdowns */}
+              {false && (
+                <div className="nav-auth-dropdown">
+                  <span className="nav-link">Sign Up ▾</span>
+                  <div className="dropdown-content">
+                    <Link to="/signup-user" className="nav-link" onClick={() => setMenuOpen(false)}>As User</Link>
+                    <Link to="/signup-driver" className="nav-link" onClick={() => setMenuOpen(false)}>As Driver</Link>
+                  </div>
+                </div>
+              )}
+              {false && (
+                <div className="nav-auth-dropdown">
+                  <span className="nav-link">Login ▾</span>
+                  <div className="dropdown-content">
+                    <Link to="/login-user" className="nav-link" onClick={() => setMenuOpen(false)}>As User</Link>
+                    <Link to="/login-driver" className="nav-link" onClick={() => setMenuOpen(false)}>As Driver</Link>
+                  </div>
+                </div>
+              )}
+            </>
           )}
           <Link to="/about" className="nav-link" onClick={() => setMenuOpen(false)}>
             About Us
@@ -165,30 +219,22 @@ const Navbar = () => {
           <Link to="/contact" className="nav-link" onClick={() => setMenuOpen(false)}>
             Contact Us
           </Link>
+          {currentUser && (
+            <Link to="/ride-history" className="nav-link" onClick={() => setMenuOpen(false)}>
+              Ride History
+            </Link>
+          )}
         </div>
-
         <div className={menuOpen ? "navbar-right active" : "navbar-right"}>
           {loading ? (
             <div className="auth-links">Loading...</div>
           ) : currentUser ? (
             <div className="user-menu">
-              {isDriver ? (
-                <>
-                  <Link to={`/driver/${currentUser.uid}`} className="driver-link" onClick={() => setMenuOpen(false)}>
-                    <FaTachometerAlt className="driver-icon" />
-                    <span>Driver Profile</span>
-                  </Link>
-                  <Link to="/DriverVehicle" className="driver-link" onClick={() => setMenuOpen(false)}>
-                    <FaCar className="driver-icon" />
-                    <span>Add Vehicles</span>
-                  </Link>
-                </>
-              ) : (
-                <Link to="/Dashboard" className="user-link" onClick={() => setMenuOpen(false)}>
-                  <FaUser className="user-icon" />
-                  <span>{userProfile?.fullName || 'My Profile'}</span>
-                </Link>
-              )}
+              <Link to="/Dashboard" className="user-link" onClick={() => setMenuOpen(false)}>
+                <FaUser className="user-icon" />
+                <span>{userProfile?.fullName || 'My Profile'}</span>
+              </Link>
+              <NotificationSystem />
               <button onClick={() => {handleLogout(); setMenuOpen(false);}} className="logout-btn">
                 <FaSignOutAlt className="logout-icon" />
                 <span>Logout</span>
@@ -201,7 +247,6 @@ const Navbar = () => {
             </div>
           )}
         </div>
-
         <div 
           className={menuOpen ? "menu-overlay active" : "menu-overlay"}
           onClick={() => setMenuOpen(false)}

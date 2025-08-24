@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
-import { doc, getDoc, collection, query, where, getDocs, orderBy, addDoc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, query, where, getDocs, onSnapshot } from 'firebase/firestore';
+
 import { FaUser, FaCar, FaStar, FaPhone, FaEnvelope, FaMapMarkerAlt, FaWhatsapp } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
 import FeedbackForm from '../components/FeedbackForm';
@@ -17,6 +18,7 @@ const DriverDetails = () => {
   const [loading, setLoading] = useState(true);
   const [feedbacks, setFeedbacks] = useState([]);
   const [averageRating, setAverageRating] = useState(0);
+
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -55,8 +57,6 @@ const DriverDetails = () => {
             experience: driverData.yearsOfExperience || '0',
             emergencyContactName: driverData.emergencyContactName || 'N/A',
             emergencyContactPhone: driverData.emergencyContactPhone || 'N/A',
-            rating: driverData.rating || 0,
-            reviews: driverData.reviews || [],
             status: driverData.status || 'pending',
             isApproved: driverData.isApproved || false,
             dateOfBirth: driverData.dateOfBirth || 'N/A',
@@ -76,24 +76,29 @@ const DriverDetails = () => {
           }));
           setVehicles(vehiclesList);
 
-          // Update average rating from the reviews array
-          if (driverData.reviews && driverData.reviews.length > 0) {
-            const total = driverData.reviews.reduce((sum, review) => sum + (review.rating || 0), 0);
-            setAverageRating((total / driverData.reviews.length).toFixed(1));
-          }
+          // Listen to feedback collection for this driver (source of truth)
+          const fbRef = collection(db, 'feedback');
+          const qFb = query(fbRef, where('driverId', '==', driverId));
+          const unsub = onSnapshot(qFb, (snap) => {
+            const list = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            // newest first
+            list.sort((a, b) => {
+              const ad = a.createdAt?.toDate?.() ? a.createdAt.toDate() : (a.createdAt ? new Date(a.createdAt) : 0);
+              const bd = b.createdAt?.toDate?.() ? b.createdAt.toDate() : (b.createdAt ? new Date(b.createdAt) : 0);
+              return bd - ad;
+            });
+            setFeedbacks(list);
+            const ratings = list.map(x => x.rating || 0).filter(r => typeof r === 'number' && r > 0);
+            const avg = ratings.length ? ratings.reduce((s, r) => s + r, 0) / ratings.length : 0;
+            setAverageRating(Number(avg.toFixed(1)));
+          }, (err) => {
+            console.error('Driver feedback listen error:', err);
+            setFeedbacks([]);
+            setAverageRating(0);
+          });
 
-          // Set feedbacks from reviews array
-          if (driverData.reviews) {
-            setFeedbacks(driverData.reviews.map((review, index) => ({
-              id: index,
-              rating: review.rating,
-              feedback: review.feedback,
-              createdAt: review.createdAt,
-              sentiment: review.sentiment,
-              sentimentScore: review.sentimentScore,
-              normalizedRating: review.normalizedRating
-            })));
-          }
+          // cleanup listener when component unmounts or driverId changes
+          return () => unsub();
         } else {
           console.log('No driver found with ID:', driverId);
           setError('Driver not found. Please check the driver ID and try again.');
@@ -123,42 +128,6 @@ const DriverDetails = () => {
         createdAt: new Date(),
       });
 
-      // Update driver's rating in Firestore
-      const driverDoc = await getDoc(doc(db, 'drivers', driverId));
-      if (driverDoc.exists()) {
-        const driverData = driverDoc.data();
-        const currentRating = driverData.rating || 0;
-        const currentReviews = driverData.reviews || [];
-        
-        const newRating = ((currentRating * currentReviews.length) + rating) / (currentReviews.length + 1);
-        
-        await updateDoc(doc(db, 'drivers', driverId), {
-          rating: newRating,
-          reviews: [...currentReviews, { 
-            rating, 
-            feedback, 
-            sentiment: sentimentResult.sentiment,
-            sentimentScore: sentimentResult.score,
-            normalizedRating: sentimentResult.normalizedRating,
-            createdAt: new Date() 
-          }]
-        });
-
-        // Update local state
-        setDriver(prev => ({
-          ...prev,
-          rating: newRating,
-          reviews: [...(prev.reviews || []), { 
-            rating, 
-            feedback, 
-            sentiment: sentimentResult.sentiment,
-            sentimentScore: sentimentResult.score,
-            normalizedRating: sentimentResult.normalizedRating,
-            createdAt: new Date() 
-          }]
-        }));
-      }
-      
       return true;
     } catch (err) {
       console.error('Error submitting feedback:', err);
@@ -217,8 +186,8 @@ const DriverDetails = () => {
             </div>
             <div className="rating">
               <FaStar className="star-icon" />
-              <span>{driver.rating || '0.0'}</span>
-              <span className="review-count">({driver.reviews ? driver.reviews.length : 0} reviews)</span>
+              <span>{averageRating.toFixed ? averageRating.toFixed(1) : Number(averageRating || 0).toFixed(1)}</span>
+              <span className="review-count">({feedbacks.length} reviews)</span>
             </div>
           </div>
         </div>
@@ -342,13 +311,7 @@ const DriverDetails = () => {
         )}
       </div>
 
-      <div className="rate-driver-section">
-        <h2>Rate This Driver</h2>
-        <FeedbackForm 
-          driverId={driverId}
-          onFeedbackSubmit={handleFeedbackSubmit}
-        />
-      </div>
+      
     </div>
   );
 };

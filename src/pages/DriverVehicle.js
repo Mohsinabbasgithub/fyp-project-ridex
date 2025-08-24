@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { db, storage } from "../firebase";
-import { collection, addDoc, doc, getDoc, serverTimestamp } from "firebase/firestore";
+import { collection, addDoc, doc, getDoc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '../context/AuthContext';
@@ -119,8 +119,8 @@ const DriverVehicle = () => {
     }
 
     try {
-    setLoading(true);
-    setError('');
+      setLoading(true);
+      setError('');
 
       const vehicleData = {
         ...formData,
@@ -132,7 +132,17 @@ const DriverVehicle = () => {
 
       const vehiclesRef = collection(db, 'vehicles');
       await addDoc(vehiclesRef, vehicleData);
-      navigate('/Dashboard');
+      
+      // Initialize driver profile with online/available status
+      const driverRef = doc(db, 'drivers', driverId);
+      await updateDoc(driverRef, {
+        isOnline: false,
+        isAvailable: false,
+        hasVehicle: true,
+        lastUpdated: serverTimestamp()
+      });
+      
+      navigate('/driver-dashboard');
     } catch (err) {
       setError('Error adding vehicle');
       console.error(err);

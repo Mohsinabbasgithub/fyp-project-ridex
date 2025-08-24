@@ -4,6 +4,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase';
 import '../styles/LoginForm.css';
 import { FaLock, FaEnvelope } from 'react-icons/fa';
+import { useAuth } from '../context/AuthContext';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
@@ -11,15 +12,23 @@ const LoginForm = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login, userRole } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
-
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      navigate('/');
+      await login(email, password);
+      // Wait for userRole to be set (may need to check in useEffect)
+      // For now, redirect based on userRole
+      setTimeout(() => {
+        if (userRole === 'driver') {
+          navigate('/DriverDashboard');
+        } else {
+          navigate('/');
+        }
+      }, 500);
     } catch (err) {
       setError('Invalid email or password');
     } finally {

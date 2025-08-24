@@ -115,6 +115,47 @@
   color: #721c24;
 }
 
+/* Booking status badges */
+.status-badge.bidding {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.status-badge.searching {
+  background-color: #fff8e1;
+  color: #f57c00;
+}
+
+.status-badge.driver-selected {
+  background-color: #e8f5e8;
+  color: #2e7d32;
+}
+
+.status-badge.confirmed {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.status-badge.in-progress {
+  background-color: #fff3e0;
+  color: #ef6c00;
+}
+
+.status-badge.completed {
+  background-color: #e8f5e8;
+  color: #2e7d32;
+}
+
+.status-badge.cancelled {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.status-badge.unknown {
+  background-color: #f5f5f5;
+  color: #666;
+}
+
 .action-buttons {
   display: flex;
   gap: 8px;

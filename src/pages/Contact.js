@@ -184,22 +184,6 @@ const Contact = () => {
           )}
         </div>
       </div>
-      
-      <div className="map-container">
-        <h2>Our Location</h2>
-        <div className="map">
-          {/* In a real app, you would integrate Google Maps or another map service here */}
-          <img 
-            src="https://maps.googleapis.com/maps/api/staticmap?center=Brooklyn+Bridge,New+York,NY&zoom=13&size=600x300&maptype=roadmap&markers=color:red%7Clabel:S%7C40.702147,-74.015794&key=YOUR_API_KEY" 
-            alt="Map location"
-            className="map-placeholder"
-          />
-          <div className="map-overlay">
-            <p>Map integration would be placed here in production.</p>
-            <p>This is just a placeholder image.</p>
-          </div>
-        </div>
-      </div>
 
       <div className="faq-section">
         <h2>Frequently Asked Questions</h2>

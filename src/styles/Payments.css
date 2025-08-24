@@ -64,6 +64,7 @@
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 20px;
+  color: #2c3e50;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -119,7 +120,44 @@
   font-size: 1.5rem;
 }
 
+/* Wallet Actions */
+.wallet-actions {
+  display: flex;
+  gap: 12px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+.add-funds-btn {
+  padding: 12px 20px;
+  background: #1a73e8;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.add-funds-btn:hover {
+  background: #1557b0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(26, 115, 232, 0.3);
+}
+
+.add-funds-btn:active {
+  transform: translateY(0);
+}
+
 /* Payment Methods */
+.payment-methods {
+  margin-top: 20px;
+}
+
 .methods-header {
   display: flex;
   justify-content: space-between;
@@ -128,21 +166,22 @@
 }
 
 .add-method-btn {
-  padding: 10px 20px;
-  background-color: #1a73e8;
+  padding: 12px 20px;
+  background: #1a73e8;
   color: white;
   border: none;
-  border-radius: 5px;
-  font-size: 1rem;
+  border-radius: 8px;
+  font-size: 14px;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 8px;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .add-method-btn:hover {
-  background-color: #1557b0;
+  background: #1557b0;
+  transform: translateY(-2px);
 }
 
 .saved-methods {
@@ -155,9 +194,16 @@
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 20px;
+  color: #2c3e50;
   display: flex;
   align-items: center;
   gap: 20px;
+  transition: all 0.3s ease;
+}
+
+.method-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
 }
 
 .card-icon {
@@ -170,7 +216,7 @@
 }
 
 .card-info h3 {
-  margin: 0 0 5px;
+  margin: 0 0 5px 0;
   color: #333;
 }
 
@@ -196,25 +242,74 @@
 }
 
 .edit-btn {
-  background-color: transparent;
+  background: transparent;
   color: #1a73e8;
   border: 1px solid #1a73e8;
 }
 
 .edit-btn:hover {
-  background-color: #1a73e8;
+  background: #1a73e8;
   color: white;
 }
 
 .delete-btn {
-  background-color: transparent;
+  background: transparent;
   color: #dc3545;
   border: 1px solid #dc3545;
 }
 
 .delete-btn:hover {
-  background-color: #dc3545;
+  background: #dc3545;
   color: white;
+}
+
+.no-methods {
+  text-align: center;
+  padding: 40px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: #2c3e50;
+}
+
+.no-methods h3 {
+  margin: 0 0 10px 0;
+  color: #666;
+}
+
+.no-methods p {
+  margin: 0;
+  color: #999;
+}
+
+/* Enhanced Wallet Balance Card */
+.wallet-balance-card {
+  background: linear-gradient(135deg, #1a73e8 0%, #1557b0 100%);
+  color: white;
+  padding: 24px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(26, 115, 232, 0.3);
+}
+
+.wallet-icon {
+  font-size: 2.5rem;
+  opacity: 0.9;
+}
+
+.wallet-balance-card h3 {
+  margin: 0 0 8px 0;
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+.wallet-balance {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 0;
 }
 
 .no-payments {
@@ -223,6 +318,7 @@
   background: white;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: #2c3e50;
 }
 
 .no-payments h3 {
@@ -242,7 +338,7 @@
 }
 
 /* Responsive Design */
-@media screen and (max-width: 768px) {
+@media (max-width: 768px) {
   .payments-container {
     padding: 15px;
   }
@@ -265,11 +361,13 @@
   .method-card {
     flex-direction: column;
     text-align: center;
+    gap: 15px;
   }
 
   .card-actions {
     flex-direction: column;
     width: 100%;
+    justify-content: center;
   }
 
   .edit-btn,
@@ -285,5 +383,22 @@
   .add-method-btn {
     width: 100%;
     justify-content: center;
+  }
+
+  .wallet-actions {
+    flex-direction: column;
+  }
+
+  .add-funds-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .wallet-balance-card {
+    padding: 20px;
+  }
+
+  .wallet-balance {
+    font-size: 1.5rem;
   }
 } 

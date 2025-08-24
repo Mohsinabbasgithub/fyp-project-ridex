@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useAuth } from '../context/AuthContext';
+import { useAdminAuth } from '../context/AdminAuthContext';
 import { useNavigate } from 'react-router-dom';
 import { FaCar } from 'react-icons/fa';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
@@ -12,16 +12,14 @@ export default function AdminLogin() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { login } = useAdminAuth();
   const navigate = useNavigate();
 
   async function setupAdminInFirestore(uid) {
     try {
       const adminRef = doc(db, 'admins', uid);
       const adminDoc = await getDoc(adminRef);
-      
       if (!adminDoc.exists()) {
-        // Create new admin document if it doesn't exist
         await setDoc(adminRef, {
           email: email,
           role: 'admin',
@@ -29,7 +27,6 @@ export default function AdminLogin() {
           lastLogin: new Date().toISOString()
         });
       } else {
-        // Update last login time if admin exists
         await setDoc(adminRef, {
           lastLogin: new Date().toISOString()
         }, { merge: true });
@@ -42,20 +39,13 @@ export default function AdminLogin() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    
     try {
       setError('');
       setLoading(true);
-
-      // First sign in to get the user ID
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const uid = userCredential.user.uid;
-
-      // Setup or update admin in Firestore
       await setupAdminInFirestore(uid);
-
-      // Proceed with login through AuthContext
-      await login(email, password, true);
+      await login(email, password);
       navigate('/admin-dashboard');
     } catch (error) {
       console.error('Login error:', error);
