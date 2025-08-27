@@ -13,7 +13,7 @@ export const useGoogleMaps = () => {
 
 export const GoogleMapsProvider = ({ children }) => {
   const { isLoaded, loadError } = useJsApiLoader({
-    googleMapsApiKey: 'AIzaSyCU1FxiYGZ4tuJKlXw70zbpmE9W-d4L_2k', // ✅ fixed
+    googleMapsApiKey: process.env["REACT_APP_GOOGLE_MAPS_API_KEY"] || '',
     libraries: ['places'], // 'maps' is loaded by default
   });
 
