@@ -68,67 +68,10 @@ const About = () => {
         </div>
       </section>
 
-      <section className="team-section">
-        <h2>Our Leadership Team</h2>
-        <div className="team-grid">
-          <div className="team-member">
-            <div className="member-image">
-              <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="John Smith" />
-            </div>
-            <h3>John Smith</h3>
-            <p className="member-title">Founder & CEO</p>
-            <p className="member-bio">Former tech executive with 15+ years of experience in transportation and logistics.</p>
-          </div>
-          <div className="team-member">
-            <div className="member-image">
-              <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sarah Johnson" />
-            </div>
-            <h3>Sarah Johnson</h3>
-            <p className="member-title">Chief Operations Officer</p>
-            <p className="member-bio">Expertise in scaling operations and optimizing user experience across platforms.</p>
-          </div>
-          <div className="team-member">
-            <div className="member-image">
-              <img src="https://randomuser.me/api/portraits/men/68.jpg" alt="Michael Chen" />
-            </div>
-            <h3>Michael Chen</h3>
-            <p className="member-title">Chief Technology Officer</p>
-            <p className="member-bio">Tech innovator with background in AI and mobile application development.</p>
-          </div>
-          <div className="team-member">
-            <div className="member-image">
-              <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Lisa Patel" />
-            </div>
-            <h3>Lisa Patel</h3>
-            <p className="member-title">Head of Marketing</p>
-            <p className="member-bio">Digital marketing strategist focused on community building and brand development.</p>
-          </div>
-        </div>
-      </section>
+      {/* Team and Stats sections removed as requested */}
 
-      <section className="stats-section">
-        <h2>RideX by the Numbers</h2>
-        <div className="stats-grid">
-          <div className="stat-card">
-            <h3>5,000+</h3>
-            <p>Registered Drivers</p>
-          </div>
-          <div className="stat-card">
-            <h3>25,000+</h3>
-            <p>Happy Customers</p>
-          </div>
-          <div className="stat-card">
-            <h3>100+</h3>
-            <p>Cities Served</p>
-          </div>
-          <div className="stat-card">
-            <h3>4.8/5</h3>
-            <p>Average Rating</p>
-          </div>
-        </div>
-      </section>
     </div>
   );
 };
 
-export default About; 
+export default About;

@@ -180,12 +180,6 @@ const Navbar = () => {
           <Link to="/feedback" className="nav-link" onClick={() => setMenuOpen(false)}>
             Reviews
           </Link>
-          {/* Hidden as requested: Find Vehicles */}
-          {false && (
-            <Link to="/all-vehicles" className="nav-link" onClick={() => setMenuOpen(false)}>
-              Find Vehicles
-            </Link>
-          )}
           <Link to="/ride-booking" className="nav-link" onClick={() => setMenuOpen(false)}>
             <FaTaxi /> Book a Ride
           </Link>

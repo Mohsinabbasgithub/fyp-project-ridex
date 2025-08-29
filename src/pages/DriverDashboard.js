@@ -643,6 +643,9 @@ const DriverDashboard = () => {
         ]
       });
 
+      // Notify the user about the counter offer
+      await createRideNotification(request.userId, request.id, 'driver_counter', driverData.fullName);
+
       setSelectedBiddingRequest(null);
       setCounterOfferAmount(0);
     } catch (error) {
@@ -654,6 +657,11 @@ const DriverDashboard = () => {
     try {
       await updateDoc(doc(db, 'bookings', request.id), {
         biddingStatus: 'rejected',
+        status: 'searching',
+        driverId: null,
+        driverName: null,
+        driverPhone: null,
+        driverCounterOffer: null,
         biddingHistory: [
           ...(request.biddingHistory || []),
           {
@@ -664,6 +672,9 @@ const DriverDashboard = () => {
           }
         ]
       });
+
+      // Notify the user that the driver rejected
+      await createRideNotification(request.userId, request.id, 'driver_rejected', driverData.fullName);
 
       setSelectedBiddingRequest(null);
     } catch (error) {
@@ -1205,15 +1216,15 @@ const DriverDashboard = () => {
         <div className="earnings-grid">
           <div className="earning-card">
             <h4>Today</h4>
-            <p>${earnings.today.toFixed(2)}</p>
+            <p>PKR {earnings.today.toFixed(2)}</p>
           </div>
           <div className="earning-card">
             <h4>This Week</h4>
-            <p>${earnings.week.toFixed(2)}</p>
+            <p>PKR {earnings.week.toFixed(2)}</p>
           </div>
           <div className="earning-card">
             <h4>This Month</h4>
-            <p>${earnings.month.toFixed(2)}</p>
+            <p>PKR {earnings.month.toFixed(2)}</p>
           </div>
         </div>
       </div>
@@ -1327,68 +1338,7 @@ const DriverDashboard = () => {
             </div>
             )}
 
-            {/* Debug Buttons for Testing */}
-            {process.env.NODE_ENV === 'development' && (
-              <div className="debug-buttons" style={{ marginTop: '15px', padding: '10px', background: '#f8f9fa', borderRadius: '8px', border: '1px solid #ddd' }}>
-                <h5>🔧 Debug Controls (Development Only)</h5>
-                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                  <button 
-                    onClick={() => {
-                      console.log('DEBUG: Force setting rideStep to navigating');
-                      setRideStep('navigating');
-                      setForceUpdate(prev => prev + 1);
-                    }}
-                    style={{ padding: '5px 10px', background: '#3498db', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
-                  >
-                    Force: Navigating
-                  </button>
-                  <button 
-                    onClick={() => {
-                      console.log('DEBUG: Force setting rideStep to pickup');
-                      setRideStep('pickup');
-                      setForceUpdate(prev => prev + 1);
-                    }}
-                    style={{ padding: '5px 10px', background: '#f39c12', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
-                  >
-                    Force: Pickup
-                  </button>
-                  <button 
-                    onClick={() => {
-                      console.log('DEBUG: Force setting rideStep to in-progress');
-                      setRideStep('in-progress');
-                      setForceUpdate(prev => prev + 1);
-                    }}
-                    style={{ padding: '5px 10px', background: '#e67e22', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
-                  >
-                    Force: In Progress
-                  </button>
-                  <button 
-                    onClick={() => {
-                      console.log('DEBUG: Force setting rideStep to completed');
-                      setRideStep('completed');
-                      setForceUpdate(prev => prev + 1);
-                    }}
-                    style={{ padding: '5px 10px', background: '#27ae60', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
-                  >
-                    Force: Completed
-                  </button>
-                  <button 
-                    onClick={() => {
-                      console.log('DEBUG: Current state dump');
-                      console.log('rideStep:', rideStep);
-                      console.log('isManualUpdate:', isManualUpdate);
-                      console.log('stepLoading:', stepLoading);
-                      console.log('forceUpdate:', forceUpdate);
-                      console.log('activeRide:', activeRide);
-                      alert(`Current State:\nrideStep: ${rideStep}\nisManualUpdate: ${isManualUpdate}\nstepLoading: ${stepLoading}\nforceUpdate: ${forceUpdate}`);
-                    }}
-                    style={{ display: 'none' }}
-                  >
-                    
-                  </button>
-          </div>
-              </div>
-            )}
+            {/* Debug controls removed for production */}
           </div>
 
           {/* Live Map */}
@@ -1459,12 +1409,12 @@ const DriverDashboard = () => {
                     </div>
                   </div>
                   <div className="request-details">
-                    <p><FaCar /> ${request.estimatedPrice}</p>
+                    <p><FaCar /> PKR {request.estimatedPrice}</p>
                     <p><FaClock /> {request.estimatedTime} min</p>
                     <p><FaUser /> {request.userEmail}</p>
                     {request.status === 'bidding' && (
                       <div className="bidding-info">
-                        <p><FaDollarSign /> User Proposed: <strong>${request.userProposedPrice}</strong></p>
+                        <p><FaDollarSign /> User Proposed: <strong>PKR {request.userProposedPrice}</strong></p>
                         <p><FaHandshake /> Bidding Request</p>
                   </div>
                     )}
@@ -1477,7 +1427,7 @@ const DriverDashboard = () => {
                         className="accept-btn"
                         onClick={() => handleAcceptBiddingRequest(request)}
                       >
-                        Accept ${request.userProposedPrice}
+                        Accept PKR {request.userProposedPrice}
                       </button>
                       <button 
                         className="counter-btn"
@@ -1513,11 +1463,11 @@ const DriverDashboard = () => {
           <div className="modal-content">
             <h3>Make Counter Offer</h3>
             <div className="offer-details">
-              <p>User's proposed fare: <strong>${selectedBiddingRequest.userProposedPrice}</strong></p>
-              <p>Estimated fare: <strong>${selectedBiddingRequest.estimatedPrice}</strong></p>
+              <p>User's proposed fare: <strong>PKR {selectedBiddingRequest.userProposedPrice}</strong></p>
+              <p>Estimated fare: <strong>PKR {selectedBiddingRequest.estimatedPrice}</strong></p>
             </div>
             <div className="counter-input">
-              <label>Your Counter Offer ($):</label>
+              <label>Your Counter Offer (PKR):</label>
               <input
                 type="number"
                 min="1"

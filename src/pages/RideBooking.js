@@ -48,8 +48,9 @@ const RideBooking = () => {
     if (bookingData.pickupLocation && bookingData.destination) {
       // Simulate distance calculation (in real app, use Google Maps API)
       const distance = Math.random() * 20 + 5; // 5-25 km
-      const basePrice = 2.5; // Base fare
-      const pricePerKm = 1.2; // Price per kilometer
+      // PKR-based pricing (configurable via env)
+      const basePrice = parseFloat(process.env.REACT_APP_BASE_FARE_PKR || '250'); // Base fare in PKR
+      const pricePerKm = parseFloat(process.env.REACT_APP_PRICE_PER_KM_PKR || '120'); // Price per kilometer in PKR
       const selectedRideType = rideTypes.find(rt => rt.id === bookingData.rideType);
       
       const totalPrice = (basePrice + (distance * pricePerKm)) * selectedRideType.price;
@@ -564,7 +565,7 @@ const RideBooking = () => {
             </div>
             <div className="estimation-item">
               <FaCar />
-              <span>Estimated Price: ${estimatedPrice}</span>
+              <span>Estimated Price: PKR {estimatedPrice}</span>
             </div>
           </div>
           
@@ -573,7 +574,7 @@ const RideBooking = () => {
             <div className="bidding-section">
               <h3><FaDollarSign /> Propose Your Fare</h3>
               <div className="bidding-input">
-                <label>Your Proposed Price ($):</label>
+                <label>Your Proposed Price (PKR):</label>
                 <input
                   type="number"
                   min="1"
@@ -606,7 +607,7 @@ const RideBooking = () => {
           <div className="bidding-status-card">
             <h3><FaHandshake /> Waiting for Driver Response</h3>
             <div className="bidding-info">
-              <p>Your proposed fare: <strong>${userProposedPrice}</strong></p>
+              <p>Your proposed fare: <strong>PKR {userProposedPrice}</strong></p>
               <p>Waiting for drivers to accept or counter your offer...</p>
             </div>
             <div className="bidding-actions">
@@ -624,13 +625,13 @@ const RideBooking = () => {
           <div className="counter-offer-card">
             <h3><FaHandshake /> Driver Counter Offer</h3>
             <div className="offer-details">
-              <p>Your proposed fare: <strong>${userProposedPrice}</strong></p>
-              <p>Driver's counter offer: <strong>${driverCounterOffer}</strong></p>
-              <p>Difference: <strong>${(driverCounterOffer - userProposedPrice).toFixed(2)}</strong></p>
+              <p>Your proposed fare: <strong>PKR {userProposedPrice}</strong></p>
+              <p>Driver's counter offer: <strong>PKR {driverCounterOffer}</strong></p>
+              <p>Difference: <strong>PKR {(driverCounterOffer - userProposedPrice).toFixed(2)}</strong></p>
             </div>
             <div className="counter-offer-actions">
               <button className="accept-btn" onClick={handleAcceptCounterOffer}>
-                Accept ${driverCounterOffer}
+                Accept PKR {driverCounterOffer}
               </button>
               <button className="reject-btn" onClick={handleRejectCounterOffer}>
                 Reject & Continue Searching
@@ -654,7 +655,7 @@ const RideBooking = () => {
                   {bid.type === 'user_rejection' && <FaHandshake />}
                 </div>
                 <div className="bid-info">
-                  <span className="bid-price">${bid.price}</span>
+                  <span className="bid-price">PKR {bid.price}</span>
                   <span className="bid-time">
                     {bid.timestamp?.toDate?.()?.toLocaleTimeString() || 'Now'}
                   </span>
@@ -749,7 +750,7 @@ const RideBooking = () => {
               </div>
               <div className="ride-summary">
                 <p>Estimated Time: {estimatedTime} min</p>
-                <p>Estimated Price: ${estimatedPrice}</p>
+                <p>Estimated Price: PKR {estimatedPrice}</p>
               </div>
             </div>
             <div className="confirmation-actions">
